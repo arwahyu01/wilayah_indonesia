@@ -109,20 +109,31 @@ fetchWilayah("kelurahan/desa", "110101");
 
 ```python
 import requests
+import json
 
 def fetch_wilayah(level, id="0"):
     url = f"https://raw.githubusercontent.com/arwahyu01/wilayah_indonesia/main/data/{id}.json"
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10) 
+        response.raise_for_status()
+        
         data = response.json()
-        print(f"Data {level}:", data)
-    except Exception as e:
-        print("Gagal mengambil data", e)
+        print(f"Data {level}:")
+        print(json.dumps(data, indent=2))
+    except requests.exceptions.RequestException as e:
+        print(f"Gagal mengambil data {level}: {e}")
 
-fetch_wilayah("provinsi")
-fetch_wilayah("kota/kabupaten", "11")
-fetch_wilayah("kecamatan", "1105")
-fetch_wilayah("kelurahan/desa", "110101")
+# Ambil data wilayah secara berurutan
+wilayah = {
+    "provinsi": "0",
+    "kota/kabupaten": "11",
+    "kecamatan": "1105",
+    "kelurahan/desa": "110101"
+}
+
+for level, id in wilayah.items():
+    fetch_wilayah(level, id)
+
 ```
 
 #### Menggunakan PHP (cURL)
