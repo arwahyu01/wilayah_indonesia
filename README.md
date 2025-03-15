@@ -199,7 +199,6 @@ Kontribusi dari komunitas sangat dihargai! Jika Anda ingin menambahkan atau memp
 Jika Anda memiliki pertanyaan atau masukan, silakan hubungi:
 
 - **GitHub:** [@arwahyu01](https://github.com/arwahyu01)
-- **Email:** [your-email@example.com] (Opsional, jika ingin ditampilkan)
 
 Jika proyek ini bermanfaat bagi Anda, mohon untuk memberikan ⭐ di GitHub! 🚀
 
