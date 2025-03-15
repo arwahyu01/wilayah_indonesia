@@ -86,6 +86,7 @@ https://raw.githubusercontent.com/arwahyu01/wilayah_indonesia/main/data/
 Berikut adalah contoh kode dalam berbagai bahasa pemrograman untuk mengambil data wilayah berdasarkan tingkatannya secara otomatis.
 
 #### Menggunakan JavaScript (Fetch API)
+
 ```js
 async function fetchWilayah(level, id = "0") {
     const url = `https://raw.githubusercontent.com/arwahyu01/wilayah_indonesia/main/data/${id}.json`;
@@ -105,6 +106,7 @@ fetchWilayah("kelurahan/desa", "110101");
 ```
 
 #### Menggunakan Python (Requests)
+
 ```python
 import requests
 
@@ -124,6 +126,7 @@ fetch_wilayah("kelurahan/desa", "110101")
 ```
 
 #### Menggunakan PHP (cURL)
+
 ```php
 function fetchWilayah($level, $id = "0") {
     $url = "https://raw.githubusercontent.com/arwahyu01/wilayah_indonesia/main/data/" . $id . ".json";
@@ -143,37 +146,51 @@ fetchWilayah("kelurahan/desa", "110101");
 ```
 
 #### Menggunakan Golang
+
 ```go
-package main
-
-import (
-    "encoding/json"
-    "fmt"
-    "io/ioutil"
-    "net/http"
-)
-
-func fetchWilayah(level string, id string) {
-    url := "https://raw.githubusercontent.com/arwahyu01/wilayah_indonesia/main/data/" + id + ".json"
-    resp, err := http.Get(url)
-    if err != nil {
-        fmt.Println("Gagal mengambil data:", err)
-        return
+    package main
+    
+    import (
+        "encoding/json"
+        "fmt"
+        "io"
+        "net/http"
+    )
+    
+    func fetchWilayah(level, id string) {
+        url := "https://raw.githubusercontent.com/arwahyu01/wilayah_indonesia/main/data/" + id + ".json"
+        resp, err := http.Get(url)
+        if err != nil {
+            fmt.Printf("Gagal mengambil data %s: %v\n", level, err)
+            return
+        }
+        defer resp.Body.Close()
+    
+        body, err := io.ReadAll(resp.Body)
+        if err != nil {
+            fmt.Printf("Gagal membaca data %s: %v\n", level, err)
+            return
+        }
+    
+        var data any
+        if err := json.Unmarshal(body, &data); err != nil {
+            fmt.Printf("Gagal parsing JSON %s: %v\n", level, err)
+            return
+        }
+    
+        fmt.Printf("Data %s: %v\n", level, data)
     }
-    defer resp.Body.Close()
-
-    body, _ := ioutil.ReadAll(resp.Body)
-    var data interface{}
-    json.Unmarshal(body, &data)
-    fmt.Printf("Data %s: %v\n", level, data)
-}
-
-func main() {
-    fetchWilayah("provinsi", "0")
-    fetchWilayah("kota/kabupaten", "11")
-    fetchWilayah("kecamatan", "1105")
-    fetchWilayah("kelurahan/desa", "110101")
-}
+    
+    func main() {
+        for _, wilayah := range map[string]string{
+            "provinsi":"0",
+            "kota/kabupaten":"11",
+            "kecamatan":"1105",
+            "kelurahan/desa":"110101",
+        } {
+            fetchWilayah(wilayah, wilayah)
+        }
+    }
 ```
 
 ## Cara Menggunakan
